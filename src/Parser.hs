@@ -23,3 +23,14 @@ run (Parser fn) = fn
           case pb rest1 of 
             (Left err) -> Left err
             (Right (c2, rest2)) -> Right ((c1, c2), rest2)
+
+(<|>) :: Parser a -> Parser a -> Parser a
+(Parser pa) <|> (Parser pb) = Parser orElse 
+  where
+    orElse s =
+      case pa s of
+        (Left _) ->
+          case pb s of 
+            (Left err) -> Left err
+            res2 -> res2 
+        res1 -> res1
